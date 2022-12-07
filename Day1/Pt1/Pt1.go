@@ -52,10 +52,6 @@ func Pt1() {
 
 	elfs = append(elfs, Elf{number: index, calories: calorie_total})
 
-	// for _, elf := range elfs {
-	// 	fmt.Printf("Elf %d is carrying %d calories\n", elf.number, elf.calories)
-	// }
-
 	fmt.Println(largest_total)
 	return
 }

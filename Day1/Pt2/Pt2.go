@@ -62,10 +62,6 @@ func Pt2() {
 
 	elfs = append(elfs, Elf{number: index, calories: calorie_total})
 
-	// for _, elf := range elfs {
-	// 	fmt.Printf("Elf %d is carrying %d calories\n", elf.number, elf.calories)
-	// }
-
 	elfs = insertion_sort(elfs)
 
 	fmt.Println(elfs[0].calories + elfs[1].calories + elfs[2].calories)
