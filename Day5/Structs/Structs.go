@@ -83,3 +83,21 @@ func Move_Container(stacks []Stack, number int, from int, to int) error {
 	}
 	return nil
 }
+
+func Move_Multiple_Containers(stacks []Stack, number int, from int, to int) error {
+	var containers []*Container = make([]*Container, number)
+	for i := 0; i < number; i++ {
+		temp_container, err := stacks[from].Pop()
+		if err != nil {
+			return fmt.Errorf("Removing Container: %s", err)
+		}
+		containers[i] = temp_container
+	}
+	for i := len(containers) - 1; i >= 0; i-- {
+		err := stacks[to].Add(containers[i])
+		if err != nil {
+			return fmt.Errorf("Adding Container: %s", err)
+		}
+	}
+	return nil
+}
