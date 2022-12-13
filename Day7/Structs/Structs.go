@@ -13,17 +13,39 @@ func (d *DirectoryNotFound) Error() string {
 	return "Directory not found"
 }
 
+type FileAlreadyExists struct{}
+
+func (f *FileAlreadyExists) Error() string {
+	return "File already exists"
+}
+
+type DirectoryAlreadyExists struct{}
+
+func (d *DirectoryAlreadyExists) Error() string {
+	return "Directory already exists"
+}
+
 type File struct {
 	Name string
 	Size uint64
 }
 
-func (d *Directory) Add_File(name string, size uint64) {
+func (d *Directory) Add_File(name string, size uint64) error {
+	_, ok := d.Files[name]
+	if ok {
+		return &FileAlreadyExists{}
+	}
 	d.Files[name] = File{Name: name, Size: size}
+	return nil
 }
 
-func (d *Directory) Add_Directory(name string) {
+func (d *Directory) Add_Directory(name string) error {
+	_, ok := d.Directories[name]
+	if ok {
+		return &DirectoryAlreadyExists{}
+	}
 	d.Directories[name] = Directory{Name: name, Parent_Directory: d, Files: make(map[string]File), Directories: make(map[string]Directory)}
+	return nil
 }
 
 // return the directory if it exists, otherwise return an error
@@ -38,8 +60,8 @@ func (d *Directory) CD(name string) (*Directory, error) {
 }
 
 func (d *Directory) Get_Size() uint64 {
-	var output uint64 = 0
 	var current_directory_size uint64 = 0
+	var output uint64 = 0
 	for _, file := range d.Files {
 		current_directory_size += file.Size
 	}
@@ -52,6 +74,46 @@ func (d *Directory) Get_Size() uint64 {
 		current_directory_size += temp_size
 	}
 	if current_directory_size <= 100000 {
+		output += current_directory_size
+	}
+	return output
+}
+
+func (d *Directory) Get_Size_Testing_1() uint64 {
+	var output uint64 = 0
+	var current_directory_size uint64 = 0
+	for _, file := range d.Files {
+		current_directory_size += file.Size
+	}
+	var temp_size uint64 = 0
+	for _, directory := range d.Directories {
+		temp_size = directory.Get_Size_Testing_1()
+		if temp_size <= 100000 {
+			output += temp_size
+		}
+		current_directory_size += temp_size
+	}
+	if current_directory_size <= 100000 {
+		output += current_directory_size
+	}
+	return output
+}
+
+func (d *Directory) Get_Size_Testing_2() uint64 {
+	var output uint64 = 0
+	var current_directory_size uint64 = 0
+	for _, file := range d.Files {
+		current_directory_size += file.Size
+	}
+	var temp_size uint64 = 0
+	for _, directory := range d.Directories {
+		temp_size = directory.Get_Size_Testing_2()
+		if temp_size <= 10 {
+			output += temp_size
+		}
+		current_directory_size += temp_size
+	}
+	if current_directory_size <= 10 {
 		output += current_directory_size
 	}
 	return output
