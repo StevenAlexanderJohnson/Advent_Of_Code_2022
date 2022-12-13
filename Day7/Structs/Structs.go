@@ -59,62 +59,21 @@ func (d *Directory) CD(name string) (*Directory, error) {
 	}
 }
 
-func (d *Directory) Get_Size() uint64 {
-	var current_directory_size uint64 = 0
+func (d *Directory) Get_Size() (uint64, uint64) {
 	var output uint64 = 0
+	var current_directory_size uint64 = 0
 	for _, file := range d.Files {
 		current_directory_size += file.Size
 	}
-
 	for _, directory := range d.Directories {
-		temp_size := directory.Get_Size()
-		if temp_size <= 100000 {
-			output += temp_size
-		}
-		current_directory_size += temp_size
+		temp_size, previous_size := directory.Get_Size()
+		// if temp_size <= 100000 {
+		output += temp_size
+		// }
+		current_directory_size += previous_size
 	}
 	if current_directory_size <= 100000 {
 		output += current_directory_size
 	}
-	return output
-}
-
-func (d *Directory) Get_Size_Testing_1() uint64 {
-	var output uint64 = 0
-	var current_directory_size uint64 = 0
-	for _, file := range d.Files {
-		current_directory_size += file.Size
-	}
-	var temp_size uint64 = 0
-	for _, directory := range d.Directories {
-		temp_size = directory.Get_Size_Testing_1()
-		if temp_size <= 100000 {
-			output += temp_size
-		}
-		current_directory_size += temp_size
-	}
-	if current_directory_size <= 100000 {
-		output += current_directory_size
-	}
-	return output
-}
-
-func (d *Directory) Get_Size_Testing_2() uint64 {
-	var output uint64 = 0
-	var current_directory_size uint64 = 0
-	for _, file := range d.Files {
-		current_directory_size += file.Size
-	}
-	var temp_size uint64 = 0
-	for _, directory := range d.Directories {
-		temp_size = directory.Get_Size_Testing_2()
-		if temp_size <= 10 {
-			output += temp_size
-		}
-		current_directory_size += temp_size
-	}
-	if current_directory_size <= 10 {
-		output += current_directory_size
-	}
-	return output
+	return output, current_directory_size
 }

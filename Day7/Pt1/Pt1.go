@@ -68,8 +68,6 @@ func Pt1(file_name string) (uint64, error) {
 		}
 		line_number++
 	}
-	// directory_size := directory.Get_Size()
-	directory_size := directory.Get_Size_Testing_1()
-	// directory_size := directory.Get_Size_Testing_2()
+	directory_size, _ := directory.Get_Size()
 	return directory_size, nil
 }
